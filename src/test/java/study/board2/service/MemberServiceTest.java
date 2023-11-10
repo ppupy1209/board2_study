@@ -4,8 +4,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import study.board2.domain.Member;
+import study.board2.dto.member.MemberResponseDto;
 import study.board2.exception.BusinessLogicException;
 import study.board2.repository.MemberRepository;
 
@@ -62,10 +66,10 @@ class MemberServiceTest {
         Member expectedMember = memberRepository.save(member);
 
         // when
-        Member actualMember = memberService.findMember(expectedMember.getId());
+        MemberResponseDto response = memberService.findMember(expectedMember.getId());
 
         // then
-        assertThat(actualMember.getName()).isEqualTo(expectedName);
+        assertThat(response.getName()).isEqualTo(expectedName);
     }
 
     @DisplayName("회원 1명을 조회할 때 없는 회원일 경우 MEMBER_NOT_FOUND 예외를 던진다.")
@@ -89,13 +93,15 @@ class MemberServiceTest {
         memberRepository.saveAll(List.of(member1, member2));
 
         // when
-        List<Member> members = memberService.findMembers();
+        Page<MemberResponseDto> pagedMembers = memberService.findMembers(0,2);
+        List<MemberResponseDto> members = pagedMembers.getContent();
 
         // then
         assertThat(members).hasSize(2)
-                .extracting("name")
+                .extracting("id","name")
                 .containsExactlyInAnyOrder(
-                        "kim","lee"
+                        tuple(1L,"kim"),
+                        tuple(2L,"lee")
                 );
     }
 
