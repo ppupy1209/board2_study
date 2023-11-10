@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class ErrorResponse {
     private int status;
     private String message;
