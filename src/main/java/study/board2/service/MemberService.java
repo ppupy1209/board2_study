@@ -1,15 +1,19 @@
 package study.board2.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.board2.domain.Member;
+import study.board2.dto.member.MemberResponseDto;
 import study.board2.exception.BusinessLogicException;
 import study.board2.exception.ExceptionCode;
 import study.board2.repository.MemberRepository;
 
-import java.util.List;
+
 import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Transactional
@@ -36,12 +40,14 @@ public class MemberService {
         return verifiedMember;
     }
 
-    public Member findMember(Long memberId) {
-        return findVerifiedMember(memberId);
+    public MemberResponseDto findMember(Long memberId) {
+        Member member = findVerifiedMember(memberId);
+
+        return MemberResponseDto.of(member);
     }
 
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
+    public Page<MemberResponseDto> findMembers(int page, int size) {
+        return memberRepository.findAll(PageRequest.of(page,size)).map(MemberResponseDto::of);
     }
 
     public void deleteMember(Long memberId) {
