@@ -28,4 +28,13 @@ public class Member {
     public static Member of(String name) {
         return new Member(name);
     }
+
+    private Member(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public static Member of(Long id, String name) {
+        return new Member(id,name);
+    }
 }
