@@ -24,10 +24,19 @@ public class MemberService {
 
 
     public Long saveMember(Member member) {
+        checkDuplicateName(member.getName());
 
         Member savedMember = memberRepository.save(member);
 
         return savedMember.getId();
+    }
+
+    private void checkDuplicateName(String name) {
+        Optional<Member> member = memberRepository.findByName(name);
+
+        if (member.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_MEMBER_NAME_EXISTS);
+        }
     }
 
 
@@ -56,7 +65,7 @@ public class MemberService {
         memberRepository.delete(member);
     }
 
-    private Member findVerifiedMember(Long memberId) {
+    public Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
 
         Member member = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
