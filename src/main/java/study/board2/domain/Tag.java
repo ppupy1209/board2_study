@@ -20,4 +20,12 @@ public class Tag {
 
     @Column(name = "name", nullable = false)
     private String name; // 태그 이름
+
+    private Tag(String name) {
+        this.name = name;
+    }
+
+    public static Tag of(String name) {
+        return new Tag(name);
+    }
 }
