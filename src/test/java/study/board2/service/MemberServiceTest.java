@@ -93,15 +93,15 @@ class MemberServiceTest {
         memberRepository.saveAll(List.of(member1, member2));
 
         // when
-        Page<MemberResponseDto> pagedMembers = memberService.findMembers(0,2);
+        Page<MemberResponseDto> pagedMembers = memberService.findMembers(0, 2);
         List<MemberResponseDto> members = pagedMembers.getContent();
 
         // then
         assertThat(members).hasSize(2)
-                .extracting("id","name")
+                .extracting("id", "name")
                 .containsExactlyInAnyOrder(
-                        tuple(1L,"kim"),
-                        tuple(2L,"lee")
+                        tuple(1L, "kim"),
+                        tuple(2L, "lee")
                 );
     }
 
@@ -117,6 +117,21 @@ class MemberServiceTest {
 
         // then
         assertThat(members).isEmpty();
+    }
+
+
+    @DisplayName("멤버 이름이 중복인 경우 ALREADY_MEMBER_NAME_EXISTS 예외 발생")
+    @Test
+    void checkDuplicateName() {
+        // given
+        String givenName = "testName";
+        memberRepository.save(Member.of(givenName));
+
+        // when & then
+        assertThatThrownBy(() -> memberService.saveMember(Member.of(givenName)))
+                .isInstanceOf(BusinessLogicException.class)
+                .hasMessage("Already Member_Name Exists");
+
     }
 
 
