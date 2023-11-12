@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.FetchType.*;
 
 @Getter
@@ -29,6 +32,9 @@ public class Question {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "question",cascade = CascadeType.ALL)
+    private List<Answer> answers = new ArrayList<>();
 
 
     private Question(String title, String content, Member member) {
