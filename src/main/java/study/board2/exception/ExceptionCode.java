@@ -5,6 +5,7 @@ import lombok.Getter;
 public enum ExceptionCode {
 
     MEMBER_NOT_FOUND(404, "Member Not Found"),
+    QUESTION_NOT_FOUND(404, "Question Not Found"),
     TAG_NOT_FOUND(404,"Tag Not Found"),
 
 
