@@ -6,7 +6,7 @@ import study.board2.domain.Member;
 import study.board2.domain.Question;
 import study.board2.domain.Tag;
 import study.board2.repository.MemberRepository;
-import study.board2.repository.TagRepository;
+import study.board2.repository.tag.TagRepository;
 import study.board2.service.QuestionService;
 
 import javax.annotation.PostConstruct;
