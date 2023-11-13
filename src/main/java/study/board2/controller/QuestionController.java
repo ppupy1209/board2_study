@@ -1,12 +1,12 @@
 package study.board2.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import study.board2.dto.question.QuestionPostDto;
+import study.board2.dto.question.QuestionResponseDto;
+import study.board2.dto.response.SingleResponseDto;
 import study.board2.service.QuestionService;
 import study.board2.utils.UriCreator;
 
@@ -29,5 +29,12 @@ public class QuestionController {
         URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, questionId);
 
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/{question-id}")
+    public ResponseEntity getQuestion(@PathVariable("question-id") Long questionId) {
+        QuestionResponseDto response = questionService.findQuestion(questionId);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 }
