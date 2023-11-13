@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.board2.domain.Tag;
-import study.board2.repository.TagRepository;
+import study.board2.repository.tag.TagRepository;
 
 import java.util.List;
 

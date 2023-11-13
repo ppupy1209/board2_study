@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import study.board2.domain.Member;
 import study.board2.domain.Question;
 import study.board2.repository.MemberRepository;
-import study.board2.repository.QuestionRepository;
+import study.board2.repository.question.QuestionRepository;
 
 import static org.assertj.core.api.Assertions.*;
 
