@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import study.board2.domain.Tag;
 import study.board2.exception.BusinessLogicException;
 import study.board2.exception.ExceptionCode;
-import study.board2.repository.TagRepository;
+import study.board2.repository.tag.TagRepository;
 
 import java.util.Optional;
 

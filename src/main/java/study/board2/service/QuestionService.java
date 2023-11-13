@@ -10,11 +10,12 @@ import study.board2.domain.Tag;
 import study.board2.dto.question.QuestionResponseDto;
 import study.board2.exception.BusinessLogicException;
 import study.board2.exception.ExceptionCode;
-import study.board2.repository.QuestionRepository;
-import study.board2.repository.QuestionTagRepository;
-import study.board2.repository.TagRepository;
+import study.board2.repository.question.QuestionRepository;
+import study.board2.repository.question.QuestionTagRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -46,7 +47,12 @@ public class QuestionService {
     public QuestionResponseDto findQuestion(Long questionId) {
         Question question = findVerifiedQuestion(questionId);
 
-        return QuestionResponseDto.of(question);
+        List<QuestionTag> questionTags = questionTagRepository.findByQuestionId(questionId);
+        List<String> tags = questionTags.stream()
+                .map(questionTag -> questionTag.getTag().getName())
+                .collect(Collectors.toList());
+
+        return QuestionResponseDto.of(question,tags);
     }
 
     private Question findVerifiedQuestion(Long questionId) {
