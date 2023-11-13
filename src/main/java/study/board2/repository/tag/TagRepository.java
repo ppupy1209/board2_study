@@ -1,4 +1,4 @@
-package study.board2.repository;
+package study.board2.repository.tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import study.board2.domain.Tag;
