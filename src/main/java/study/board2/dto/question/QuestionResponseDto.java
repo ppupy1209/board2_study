@@ -14,20 +14,24 @@ public class QuestionResponseDto {
     private String title;
     private String content;
 
+    private List<String> tags;
+
     private List<AnswerResponseDto> answers;
 
-    private QuestionResponseDto(String writer, String title, String content, List<AnswerResponseDto> answers) {
+    public QuestionResponseDto(String writer, String title, String content, List<String> tags, List<AnswerResponseDto> answers) {
         this.writer = writer;
         this.title = title;
         this.content = content;
+        this.tags = tags;
         this.answers = answers;
     }
 
-    public static QuestionResponseDto of(Question question) {
+    public static QuestionResponseDto of(Question question, List<String> tags) {
         return new QuestionResponseDto(
                 question.getMember().getName(),
                 question.getTitle(),
                 question.getContent(),
+                tags,
                 question.getAnswers().stream()
                         .map(AnswerResponseDto::of)
                         .collect(Collectors.toList())
