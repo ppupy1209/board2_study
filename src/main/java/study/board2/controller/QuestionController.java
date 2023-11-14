@@ -37,4 +37,10 @@ public class QuestionController {
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
+
+    @GetMapping
+    public ResponseEntity getQuestions(@RequestParam int page,
+                                       @RequestParam int size) {
+        return new ResponseEntity<>(questionService.findQuestions(page-1,size),HttpStatus.OK);
+    }
 }
