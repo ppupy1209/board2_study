@@ -1,13 +1,17 @@
 package study.board2.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.board2.domain.Member;
 import study.board2.domain.Question;
 import study.board2.domain.QuestionTag;
 import study.board2.domain.Tag;
+import study.board2.dto.question.QuestionListResponseDto;
 import study.board2.dto.question.QuestionResponseDto;
+import study.board2.dto.response.MultiResponseDto;
 import study.board2.exception.BusinessLogicException;
 import study.board2.exception.ExceptionCode;
 import study.board2.repository.question.QuestionRepository;
@@ -53,6 +57,16 @@ public class QuestionService {
                 .collect(Collectors.toList());
 
         return QuestionResponseDto.of(question,tags);
+    }
+
+    public MultiResponseDto findQuestions(int page, int size) {
+        Page<Question> questionPage = questionRepository.findQuestionsWithMember(PageRequest.of(page,size));
+        List<Question> questions = questionPage.getContent();
+        List<QuestionListResponseDto> response = questions.stream()
+                .map(QuestionListResponseDto::of)
+                .collect(Collectors.toList());
+
+        return new MultiResponseDto<>(response,questionPage);
     }
 
     private Question findVerifiedQuestion(Long questionId) {
