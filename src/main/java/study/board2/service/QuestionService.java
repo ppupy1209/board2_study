@@ -17,6 +17,7 @@ import study.board2.exception.ExceptionCode;
 import study.board2.repository.question.QuestionRepository;
 import study.board2.repository.question.QuestionTagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -62,9 +63,18 @@ public class QuestionService {
     public MultiResponseDto findQuestions(int page, int size) {
         Page<Question> questionPage = questionRepository.findQuestionsWithMember(PageRequest.of(page,size));
         List<Question> questions = questionPage.getContent();
-        List<QuestionListResponseDto> response = questions.stream()
-                .map(QuestionListResponseDto::of)
-                .collect(Collectors.toList());
+
+        List<QuestionListResponseDto> response = new ArrayList<>();
+        for (Question question : questions) {
+            List<QuestionTag> questionTags = questionTagRepository.findByQuestionId(question.getId());
+            List<String> tags = questionTags.stream()
+                    .map(questionTag -> questionTag.getTag().getName())
+                    .collect(Collectors.toList());
+
+            QuestionListResponseDto questionListResponseDto = QuestionListResponseDto.of(question, tags);
+
+            response.add(questionListResponseDto);
+        }
 
         return new MultiResponseDto<>(response,questionPage);
     }
