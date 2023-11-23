@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import study.board2.domain.Member;
 
+
+/**
+ * 멤버 응답 표준 포맷
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class MemberResponseDto {

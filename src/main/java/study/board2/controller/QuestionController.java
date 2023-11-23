@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import study.board2.domain.SearchType;
 import study.board2.dto.question.QuestionPostDto;
 import study.board2.dto.question.QuestionResponseDto;
 import study.board2.dto.response.SingleResponseDto;
@@ -40,7 +41,9 @@ public class QuestionController {
 
     @GetMapping
     public ResponseEntity getQuestions(@RequestParam int page,
-                                       @RequestParam int size) {
-        return new ResponseEntity<>(questionService.findQuestions(page-1,size),HttpStatus.OK);
+                                       @RequestParam int size,
+                                       @RequestParam(required = false) SearchType searchType,
+                                       @RequestParam(required = false) String keyword) {
+        return new ResponseEntity<>(questionService.findQuestions(page-1,size,searchType, keyword),HttpStatus.OK);
     }
 }

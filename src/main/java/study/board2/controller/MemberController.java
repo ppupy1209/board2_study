@@ -17,6 +17,13 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * <p>
+ * 멤버 컨트롤러
+ *
+ * <p>
+ * 테스트중입니다.
+ */
 @RequiredArgsConstructor
 @RequestMapping("/members")
 @RestController
@@ -34,6 +41,13 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
+    /**
+     *  멤버 수정
+     *
+     * @param memberId 멤버 ID
+     * @param request 리퀘스트바디
+     * @return 멤버 응답
+     */
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(
             @PathVariable("member-id") Long memberId,
@@ -43,6 +57,11 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     *
+     * @param memberId 멤버 ID
+     * @return 멤버 1명 조회한다.
+     */
     @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") Long memberId) {
         MemberResponseDto response = memberService.findMember(memberId);

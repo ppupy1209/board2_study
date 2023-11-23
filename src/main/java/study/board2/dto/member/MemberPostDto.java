@@ -8,6 +8,9 @@ import study.board2.domain.Member;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 멤버 등록 포맷
+ */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
