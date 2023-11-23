@@ -3,12 +3,10 @@ package study.board2.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import study.board2.domain.Member;
-import study.board2.domain.Question;
-import study.board2.domain.QuestionTag;
-import study.board2.domain.Tag;
+import study.board2.domain.*;
 import study.board2.dto.question.QuestionListResponseDto;
 import study.board2.dto.question.QuestionResponseDto;
 import study.board2.dto.response.MultiResponseDto;
@@ -33,7 +31,7 @@ public class QuestionService {
     private final TagService tagService;
     private final QuestionTagRepository questionTagRepository;
 
-    public Long saveQuestion(Long memberId, Question question,String tags) {
+    public Long saveQuestion(Long memberId, Question question, String tags) {
         Member member = memberService.findVerifiedMember(memberId);
 
         question.setMember(member);
@@ -43,7 +41,7 @@ public class QuestionService {
         String[] splitTag = tags.split(",");
         for (String tagName : splitTag) {
             Tag tag = tagService.findVerifiedTag(tagName);
-            questionTagRepository.save(QuestionTag.of(tag,savedQuestion));
+            questionTagRepository.save(QuestionTag.of(tag, savedQuestion));
         }
 
         return savedQuestion.getId();
@@ -57,14 +55,26 @@ public class QuestionService {
                 .map(questionTag -> questionTag.getTag().getName())
                 .collect(Collectors.toList());
 
-        return QuestionResponseDto.of(question,tags);
+        return QuestionResponseDto.of(question, tags);
     }
 
-    public MultiResponseDto findQuestions(int page, int size) {
-        Page<Question> questionPage = questionRepository.findQuestionsWithMember(PageRequest.of(page,size));
+    public MultiResponseDto findQuestions(int page, int size, SearchType searchType, String keyword) {
+
+        Page<Question> questionPage = Page.empty();
+        Pageable pageable = PageRequest.of(page, size);
+        switch (searchType) {
+            case TITLE:
+                questionPage = questionRepository.findByTitleContaining(keyword, pageable);
+                break;
+            default:
+                questionPage = questionRepository.findQuestionsWithMember(pageable);
+        }
+
+
         List<Question> questions = questionPage.getContent();
 
         List<QuestionListResponseDto> response = new ArrayList<>();
+
         for (Question question : questions) {
             List<QuestionTag> questionTags = questionTagRepository.findByQuestionId(question.getId());
             List<String> tags = questionTags.stream()
@@ -76,7 +86,7 @@ public class QuestionService {
             response.add(questionListResponseDto);
         }
 
-        return new MultiResponseDto<>(response,questionPage);
+        return new MultiResponseDto<>(response, questionPage);
     }
 
     private Question findVerifiedQuestion(Long questionId) {
