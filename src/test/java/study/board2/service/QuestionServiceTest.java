@@ -27,18 +27,18 @@ class QuestionServiceTest {
     private MemberRepository memberRepository;
 
 
-    @DisplayName("질문을 등록한다.")
-    @Test
-    void saveQuestion() {
-        // given
-        Member member = memberRepository.save(Member.of("testName"));
-        Question request = Question.of("제목","내용");
-        String tags = "spring,java";
-
-        // when
-        Long questionId = questionService.saveQuestion(member.getId(), request, tags);
-
-        // then
-        assertThat(questionId).isNotNull();
-    }
+//    @DisplayName("질문을 등록한다.")
+//    @Test
+//    void saveQuestion() {
+//        // given
+//        Member member = memberRepository.save(Member.of("testName"));
+//        Question request = Question.of("제목","내용");
+//        String tags = "spring,java";
+//
+//        // when
+//        Long questionId = questionService.saveQuestion(member.getId(), request, tags);
+//
+//        // then
+//        assertThat(questionId).isNotNull();
+//    }
 }

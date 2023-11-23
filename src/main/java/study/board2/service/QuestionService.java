@@ -14,8 +14,10 @@ import study.board2.exception.BusinessLogicException;
 import study.board2.exception.ExceptionCode;
 import study.board2.repository.question.QuestionRepository;
 import study.board2.repository.question.QuestionTagRepository;
+import study.board2.repository.tag.TagRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,21 +30,20 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberService memberService;
 
-    private final TagService tagService;
+    private final TagRepository tagRepository;
     private final QuestionTagRepository questionTagRepository;
 
-    public Long saveQuestion(Long memberId, Question question, String tags) {
+    public Long saveQuestion(Long memberId, Question question, List<String> tags) {
         Member member = memberService.findVerifiedMember(memberId);
 
         question.setMember(member);
 
         Question savedQuestion = questionRepository.save(question);
 
-        String[] splitTag = tags.split(",");
-        for (String tagName : splitTag) {
-            Tag tag = tagService.findVerifiedTag(tagName);
-            questionTagRepository.save(QuestionTag.of(tag, savedQuestion));
-        }
+        tags.stream()
+                .map(tag -> tagRepository.findByName(tag)
+                        .orElseGet(() -> tagRepository.save(Tag.of(tag))))
+                .forEach(tag -> questionTagRepository.save(QuestionTag.of(tag,question)));
 
         return savedQuestion.getId();
     }

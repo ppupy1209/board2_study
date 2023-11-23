@@ -40,10 +40,10 @@ public class DataInitializer {
 
         tagRepository.saveAll(List.of(tag1, tag2, tag3, tag4, tag5));
 
-        questionService.saveQuestion(1L, Question.of("제목1","내용1"),"spring,java");
-        questionService.saveQuestion(2L, Question.of("제목2","내용2"),"java,python");
-        questionService.saveQuestion(3L, Question.of("제목3","내용3"),"spring");
-        questionService.saveQuestion(4L, Question.of("제목4","내용4"),"java,kotlin");
-        questionService.saveQuestion(5L, Question.of("제목5","내용5"),"spring,c++");
+        questionService.saveQuestion(1L, Question.of("제목1","내용1"), List.of("java", "python"));
+        questionService.saveQuestion(2L, Question.of("제목2","내용2"),List.of("newTestTag", "python"));
+        questionService.saveQuestion(3L, Question.of("제목3","내용3"),List.of("spring"));
+        questionService.saveQuestion(4L, Question.of("제목4","내용4"),List.of("java", "kotlin"));
+        questionService.saveQuestion(5L, Question.of("제목5","내용5"),List.of("spring","c++"));
     }
 }
